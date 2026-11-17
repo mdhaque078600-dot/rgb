@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise 💗</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Georgia,serif;color:#542b3b;background:linear-gradient(-45deg,#fff2f6,#f8dce8,#efc7d8,#ffe5ec);background-size:400% 400%;animation:gradientBG 10s ease infinite}
+@keyframes gradientBG{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.bg-pattern{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.4;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff99c2' width='30px' height='30px'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>");animation:moveBg 15s linear infinite}
+@keyframes moveBg{100%{background-position:100px 100px}}
+.card{width:min(92vw,440px);min-height:510px;padding:34px 25px;border:1px solid #ffffffa8;border-radius:28px;background:#fffafcdd;box-shadow:0 18px 55px #9d587733;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.heart{font-size:35px;margin-bottom:12px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+h1{font-size:clamp(25px,6vw,34px);line-height:1.25;margin:8px 0 16px}
+p{font-family:Arial,sans-serif;font-size:16px;line-height:1.65;color:#815568;margin:0 0 24px}
+button{border:0;border-radius:999px;padding:14px 27px;background:#c6537c;color:white;font-size:15px;font-weight:700;letter-spacing:.3px;cursor:pointer;box-shadow:0 7px 18px #c6537c44;transition:background .3s}
+button:hover{background:#b04368}button:active{transform:scale(.97)}
+.tiny{font-size:12px;margin-top:18px;color:#b27a91}
+.warning{animation:redPulse .75s infinite;border-color:#ff5b68}
+.warning .heart{color:#ff334f;text-shadow:0 0 12px #ff334f}
+.warning h1{color:#c51e38;text-shadow:0 0 10px #ff6b7d}
+@keyframes redPulse{0%,100%{box-shadow:0 0 12px #ff334f55,0 18px 55px #9d587733}50%{box-shadow:0 0 30px 9px #ff263f99,0 18px 55px #9d587733}}
+.emoji-rain{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.emoji-rain span{position:absolute;top:-12vh;font-size:clamp(20px,4vw,32px);animation:fall linear forwards;filter:drop-shadow(0 2px 3px #a94b7044)}
+@keyframes fall{to{transform:translate3d(var(--drift),115vh,0) rotate(540deg);opacity:.9}}
+#photo{display:none;width:min(100%,300px);max-height:390px;object-fit:cover;border-radius:20px;box-shadow:0 12px 30px #9d587744;margin:8px 0 18px;border:4px solid white}
+.show #photo{display:block;animation:fadeIn 1s ease-in}
+.show .heart{display:none}
+@keyframes fadeIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@media(max-height:650px){.card{min-height:0;padding:24px 20px}}
+</style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<audio id="bg-music" loop><source src="song.mp3" type="audio/mpeg"></audio>
+<main class="card" id="card">
+<div class="heart">💌</div>
+<img id="photo" alt="A beautiful surprise" src="photo.jpg">
+<h1 id="heading">A tiny surprise for you...</h1>
+<p id="message">I have one very important question.</p>
+<button id="next">OPEN THE SURPRISE ✨</button>
+<div class="tiny">made with a little extra love ♡</div>
+</main>
+<script>
+const steps=[
+["A tiny surprise for you...","I have one very important question.","OPEN THE SURPRISE ✨"],
+["Who is the most gorgeous girlfriend in this world?","I think the answer is obvious…","NEXT 💗"],
+["Her name starts with J…","Can you guess who I'm talking about?","NEXT"],
+["Do you want to see this beauty?","Promise you'll be ready?","SHOW ME 👀"],
+["⚠️ WARNING!","You might go blind… because this much beauty is hard to handle.","I'M READY 😎"]
+];
+let step=0;
+const card=document.getElementById("card"),heading=document.getElementById("heading"),message=document.getElementById("message"),button=document.getElementById("next"),bgMusic=document.getElementById("bg-music");
+button.addEventListener("click",()=>{
+ if(bgMusic.paused){bgMusic.play().catch(()=>{});}
+ if(step<steps.length-1){
+  step++;
+  if(step===4)card.classList.add("warning");
+  heading.textContent=steps[step][0];message.textContent=steps[step][1];button.textContent=steps[step][2];
+ }else{
+  card.classList.remove("warning");card.classList.add("show");startEmojiRain();
+  heading.textContent="There she is… JASMINE 💖";
+  message.textContent="The prettiest view, my favourite person. Your smile makes everything feel a little brighter. ♡";
+  button.style.display="none";
+ }
+});
+function startEmojiRain(){
+ const rain=document.createElement("div");rain.className="emoji-rain";document.body.appendChild(rain);
+ const emojis=["💗","💕","💖","🌸","🦋","✨","🥰","💘","🌷"];
+ for(let i=0;i<55;i++){
+  const piece=document.createElement("span");piece.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+  piece.style.left=Math.random()*100+"vw";piece.style.animationDuration=(3+Math.random()*4)+"s";
+  piece.style.animationDelay=(Math.random()*2)+"s";piece.style.setProperty("--drift",(Math.random()*150-75)+"px");rain.appendChild(piece);
+ }
+ setTimeout(()=>rain.remove(),9000);
+}
+</script>
+</body>
+</html>
